@@ -2,7 +2,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
 const path = require('path');
 const { InjectManifest } = require('workbox-webpack-plugin');
-// const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 // TODO: Add and configure workbox plugins for a service worker and manifest file.
 // TODO: Add CSS loaders and babel to webpack.
@@ -23,12 +22,13 @@ module.exports = () => {
         template: './index.html',
         title: 'Just Another Text Editor',
       }),
-      // new MiniCssExtractPlugin(),
       new InjectManifest({
         swSrc: './src-sw.js',
         swDest: 'src-sw.js',
       }),
       new WebpackPwaManifest({
+        fingerprints: false,
+        inject: true,
         name: 'Just Another Text Editor',
         short_name: 'JATE',
         description: 'A simple text editor',
@@ -37,7 +37,7 @@ module.exports = () => {
         icons: [
           {
             src: path.resolve('src/images/logo.png'),
-            sizes: [96, 128, 192, 256, 384, 512],
+            size: [96, 128, 192, 256, 384, 512],
             destination: path.join('assets', 'icons'),
           },
         ]
@@ -50,10 +50,6 @@ module.exports = () => {
           test: /\.css$/i,
           use: ['style-loader', 'css-loader'],
         },
-        // {
-        //   test: /\.(png|svg|jpg|jpeg|gif)$/i,
-        //   type: 'asset/resource',
-        // },
         {
           test: /\.m?js$/,
           exclude: /(node_modules|bower_components)/,
